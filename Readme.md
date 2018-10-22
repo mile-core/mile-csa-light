@@ -7,7 +7,7 @@
 
 ## Build
     $ git clone https://github.com/mile-core/mile-csa-light
-    $ cd ./mile-csa-api; mkdir build; cd ./build
+    $ cd ./mile-csa-light; mkdir build; cd ./build
     $ cmake ..; make -j4
     $ make test
 
