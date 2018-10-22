@@ -1,0 +1,31 @@
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+build
+cmake-build-*
+.idea
+.idea/*
+Index
+Build
+Pods
+Podfile.lock
+*.xcworkspacedata
+.version
+.vscode
+
+
+# Dependency directory
+# Commenting this out is preferred by some people, see
+# https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git-
+node_modules
+
+# Build
+build
+*-build-*
+*.user
