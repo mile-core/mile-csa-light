@@ -11,12 +11,17 @@ include_directories (
         ../vendor/nlohmann/
 )
 
+FILE(GLOB PUBLIC_INCLUDE_FILES
+        ../include/*.hpp
+        )
+
+
 FILE(GLOB INCLUDE_FILES
         ../vendor/nlohmann/*.hpp
         ../vendor/crypto/*.h
         ../vendor/crypto/*.hpp
         ../vendor/ed25519/src/*.h
-        ../include/*.hpp
+        ${PUBLIC_INCLUDE_FILES}
         )
 
 FILE(GLOB SOURCES
@@ -74,7 +79,7 @@ configure_package_config_file(
         INSTALL_DESTINATION "${config_install_dir}"
 )
 
-install(FILES ${INCLUDE_FILES} DESTINATION include)
+install(FILES ${PUBLIC_INCLUDE_FILES} DESTINATION include)
 install(TARGETS ${PROJECT_LIB}
         DESTINATION lib)
 install(FILES ${project_config} ${version_config} DESTINATION lib/cmake/${PROJECT_LIB})
