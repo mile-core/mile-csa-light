@@ -55,6 +55,16 @@ int main(int argc, char *argv[]) {
     std::string fee;
     std::string digest;
 
+    ///
+    /// Asset code
+    ///
+    milecsa::asset::code code = milecsa::asset::code::XDR;
+
+    ///
+    /// Prepare fixed point presentation asset amount
+    ///
+    std::string amount = milecsa::asset::amount_to_string(1.0f, code);
+
     //
     // Build signed transfer transaction
     //
@@ -63,8 +73,8 @@ int main(int argc, char *argv[]) {
             destination.public_key,    // "to" public key
             block_id,                  // block id
             trx_id,                    // user defined transaction id or number
-            0,                         // asset code
-            "1000",                    // amount of transfer
+            code,                      // asset code
+            amount,                    // amount of transfer
             "memo",                    // description
             "",                        // empty fee
 

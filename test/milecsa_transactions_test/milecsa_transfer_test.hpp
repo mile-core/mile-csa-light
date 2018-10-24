@@ -19,18 +19,22 @@ struct Wallet: public MIleTestTransaction {
 
     bool test() {
 
+        std::string blockId = "0";
+
         std::string transaction;
-        std::string fee;
         std::string digest;
+
+        std::string memo = "memo";
+        std::string fee = "";
 
         if (milecsa::transaction::prepare_transfer(
                 keyPair.private_key,
                 destination,
-                "0",
+                blockId,
                 milecsa::transaction::default_transaction_id,
-                1,
-                "1000",
-                "memo",
+                milecsa::asset::XDR,
+                milecsa::asset::amount_to_string(100.0f, milecsa::asset::code::XDR),
+                memo,
                 fee,
 
                 transaction,

@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string>
+#include <iomanip>
+#include <sstream>
 
 namespace milecsa {
 
@@ -17,7 +19,7 @@ namespace milecsa {
           * Common mile csa handling codes
           *
           * */
-        typedef enum {
+        typedef enum: int {
             UNKNOWN = -1,
             OK = 0,
             FAIL = 1,
@@ -28,6 +30,49 @@ namespace milecsa {
             EXCEPTION = 6,
             LAST = EXCEPTION
         } result;
+    }
+
+    namespace asset {
+
+        typedef enum: unsigned short {
+            XDR = 0,
+            MILE = 1
+        } code ;
+
+        /**
+       *
+       * Prepare asset amount from asset with user defined precision
+       *
+       * @tparam T
+       * @param amount - amount
+       * @param precision - user defined precision
+       * @return prepared amount fixed point number presented as string
+       */
+        template <typename T>
+        std::string amount_to_string_with_precision(T amount, int precision){
+            std::stringstream stream;
+            stream << std::fixed << std::setprecision(precision) << amount;
+            return stream.str();
+        }
+
+        template <typename T>
+        /**
+         * Prepare asset amount from asset code
+         *
+         * @tparam T
+         * @param amount - amount
+         * @param assetCode - asset code
+         * @return prepared amount fixed point number presented as string
+         */
+        std::string amount_to_string(T amount, milecsa::asset::code assetCode){
+            switch (assetCode){
+                case XDR:
+                    return amount_to_string_with_precision(amount, 5);
+                default:
+                    return amount_to_string_with_precision(amount, 2);
+            }
+        }
+
     }
 
     namespace keys {
@@ -136,7 +181,7 @@ namespace milecsa {
                                        const std::string &blockId,
                                        const uint64_t transactionId,
 
-                                       unsigned short asset,
+                                       asset::code assetCode,
                                        const std::string &amount,
                                        const std::string &description,
                                        const std::string &fee,

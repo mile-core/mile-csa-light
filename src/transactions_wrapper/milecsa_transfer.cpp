@@ -35,9 +35,9 @@ milecsa::light::result milecsa::transaction::prepare_transfer(const std::string 
                                                               const std::string &dstWalletPublicKey,
 
                                                               const std::string &blockId,
-                                                              const uint64_t  transactionId,
+                                                              const uint64_t transactionId,
 
-                                                              unsigned short assetCode,
+                                                              asset::code assetCode,
                                                               const std::string &amount,
                                                               const std::string &description,
                                                               const std::string &fee,

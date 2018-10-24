@@ -102,6 +102,9 @@ milecsa::light::result prepare_transaction(const std::string &name,
     digest = _digest.ToBase58CheckString();
 
     nlohmann::json parameters;
+
+    std::string _fee =  fee.empty() ? "0" : fee;
+
     parameters = {
             {"transaction-name", name},
             {"block-id",        blockId},
@@ -111,7 +114,7 @@ milecsa::light::result prepare_transaction(const std::string &name,
             {"from",            keyPair.public_key},
             {"to",              dstWalletPublicKey},
             {"asset",           {{"amount", amount}, {"code", assetCode}}},
-            {"fee",             fee},
+            {"fee",             _fee},
             {"description",     description}
     };
 
