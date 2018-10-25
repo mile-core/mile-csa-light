@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string>
+#include <iomanip>
+#include <sstream>
 
 namespace milecsa {
 
@@ -17,7 +19,7 @@ namespace milecsa {
           * Common mile csa handling codes
           *
           * */
-        typedef enum {
+        typedef enum: int {
             UNKNOWN = -1,
             OK = 0,
             FAIL = 1,
@@ -29,6 +31,58 @@ namespace milecsa {
             LAST = EXCEPTION
         } result;
     }
+
+    /**
+     * Token description
+     */
+    struct token {
+        unsigned short code;
+        unsigned short precision;
+        std::string name;
+
+        template <typename T>
+        /**
+         * Prepare asset amount from asset code
+         *
+         * @tparam T
+         * @param amount - amount
+         * @param assetCode - asset code
+         * @return prepared amount fixed point number presented as string
+         */
+        std::string value_to_string(T amount) const {
+            std::stringstream stream;
+            stream << std::fixed << std::setprecision(precision) << amount;
+            return stream.str();
+        }
+
+        /**
+         * Build tocken description
+         *
+         * @param code
+         * @param precision
+         * @param name
+         */
+        token(unsigned short code, unsigned short precision, const std::string &name);
+        token(const token &);
+
+    private:
+        token();
+    };
+
+    /**
+     * Available blockchain tokens
+     */
+    struct assets {
+        /**
+         * Stable coin
+         */
+        static token XDR;
+
+        /**
+         * Index coin
+         */
+        static token MILE;
+    };
 
     namespace keys {
 
@@ -123,8 +177,8 @@ namespace milecsa {
          * @param transactionId - user defined id or milecsa::transaction::default_transaction_id
          * @param assetCode - asset code
          * @param amount - transfer amount
+         * @param fee - always 0
          * @param description - transfer description
-         * @param fee - always empty
          * @param transaction - returned SIGNED transaction json body, can send as "params" keyword for json-rpc method "send-transaction"
          * @param digest - uniq transaction digest string
          * @param errorMessage - error message if something wrong happened
@@ -136,10 +190,10 @@ namespace milecsa {
                                        const std::string &blockId,
                                        const uint64_t transactionId,
 
-                                       unsigned short asset,
-                                       const std::string &amount,
-                                       const std::string &description,
-                                       const std::string &fee,
+                                       const milecsa::token  &asset,
+                                       float                 amount,
+                                       float                 fee,
+                                       const std::string     &description,
 
                 //
                 // Signed json
@@ -170,10 +224,10 @@ namespace milecsa {
                                        const std::string &blockId,
                                        const uint64_t transactionId,
 
-                                       unsigned short asset,
-                                       const std::string &amount,
-                                       const std::string &description,
-                                       const std::string &fee,
+                                       const milecsa::token  &asset,
+                                       float                 amount,
+                                       float                 fee,
+                                       const std::string     &description,
 
                 //
                 // Signed json

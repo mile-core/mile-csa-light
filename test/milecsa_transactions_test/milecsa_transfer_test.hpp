@@ -15,23 +15,28 @@ struct Wallet: public MIleTestTransaction {
 
     Wallet():MIleTestTransaction("Wallet"){}
 
+
     const std::string destination = "2n9z7C3f9SdCrLuCkekxFRgaFq8eoJMizRzbJDpxGoXnYgTaoz";
 
-    bool test() {
+    bool test(const milecsa::token &token) {
+
+        std::string blockId = "0";
 
         std::string transaction;
-        std::string fee;
         std::string digest;
+
+        std::string memo = "memo";
+        float fee = 0;
 
         if (milecsa::transaction::prepare_transfer(
                 keyPair.private_key,
                 destination,
-                "0",
+                blockId,
                 milecsa::transaction::default_transaction_id,
-                1,
-                "1000",
-                "memo",
+                token,
+                1.0,
                 fee,
+                memo,
 
                 transaction,
                 digest,
@@ -42,7 +47,7 @@ struct Wallet: public MIleTestTransaction {
         }
 
         BOOST_TEST_MESSAGE("Wallet    trx: " + transaction);
-        BOOST_TEST_MESSAGE("Wallet    fee: " + fee);
+        BOOST_TEST_MESSAGE("Wallet    fee: " + token.value_to_string(fee));
         BOOST_TEST_MESSAGE("Wallet digest: " + digest);
 
         return  true;

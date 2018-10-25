@@ -63,10 +63,10 @@ int main(int argc, char *argv[]) {
             destination.public_key,    // "to" public key
             block_id,                  // block id
             trx_id,                    // user defined transaction id or number
-            0,                         // asset code
-            "1000",                    // amount of transfer
+            milecsa::assets::XDR,      // asset
+            1.0f,                      // amount of transfer
+            0,                         // empty fee
             "memo",                    // description
-            "",                        // empty fee
 
             transaction,               // returned signed transaction as json string
             digest,                    // uinq transaction digest string

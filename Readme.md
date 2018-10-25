@@ -23,6 +23,26 @@
 1. Centos7 (gcc v4.8.5)
 1. OSX 10.13, XCode10
 
+### Token properties
+
+```cpp
+    #include "milecsa_light_api.hpp"
+    
+    // available tokens: 
+    milecsa::token stable = milecsa::assets::XDR;
+    milecsa::token index  = milecsa::assets::MILE;
+
+    // Properties
+    std::cout << "Name:      " << stable.name;
+    std::cout << "Code:      " << stable.code;
+    std::cout << "Precision: " << stable.precision;
+
+    // Fixed point conversion to string presentation    
+    std::string amount = asset.value_to_string(100.1f);
+     
+
+```
+
 ### Wallet public/private keys Pair structure
 
 ```cpp
@@ -88,31 +108,59 @@
 
    #include "milecsa_light_api.hpp"
    
-   std::string transaction_body;
-   std::string fee;
+    ///
+   /// trx id can be create for user reason or can be default
+   ///
+   uint64_t trx_id = default_transaction_id;
+
+   ///
+   /// Transaction container string
+   ///
+   std::string transaction;
+
+   ///
+   /// Transaction container uniq digest
+   ///
    std::string digest;
 
+   ///
+   /// Asset code
+   ///
+   milecsa::token token = milecsa::assets::XDR;
+
+   ///
+   /// Prepare fixed point presentation asset amount
+   ///
+   float amount = 1.0f;
+
+   ///
+   /// Build signed transfer transaction
+   ///
    if (milecsa::transaction::prepare_transfer(
-           privateKey,
-           destination,
-           "0",
-           0,
-           1,
-           "1000",
-           "memo",
-           fee,
+           pair.private_key,          /// "from" private key
+           to,                        /// "to" public key
+           block_id,                  /// block id
+           trx_id,                    /// user defined transaction id or number
+           token,                     /// asset
+           amount,                    /// amount of transfer
 
-           transaction_body,
-           digest,
+           0.0,                       /// fee is always 0
+           "memo",                    /// description
 
-           errorDescription)){
-           //
-           // handle error
-           //
-       return false;
+           transaction,               /// returned signed transaction as json string
+           digest,                    /// uinq transaction digest string
+
+           errorMessage               /// error message if something failed
+   )){
+
+       cerr << " prepare_transfer error: " << errorMessage << endl;
+       return -1;
    }
-   
-  
+
+   ///
+   /// Prepare transfer json-rpc buffer
+   ///
+
    // transaction is a json string -> ...
    
     std::string request = "{\"id\":0,\"jsonrpc\":\"2.0\",\"method\":\"send-transaction\",\"version\":0.0, \"params\": ";
