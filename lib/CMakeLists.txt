@@ -79,14 +79,10 @@ configure_package_config_file(
         INSTALL_DESTINATION "${config_install_dir}"
 )
 
-install(FILES ${PUBLIC_INCLUDE_FILES} DESTINATION include)
-install(TARGETS ${PROJECT_LIB}
-        DESTINATION lib)
-install(FILES ${project_config} ${version_config} DESTINATION lib/cmake/${PROJECT_LIB})
+install(TARGETS ${PROJECT_LIB}          DESTINATION lib)
+install(FILES   ${PUBLIC_INCLUDE_FILES} DESTINATION include)
+install(FILES   ${project_config} ${version_config} DESTINATION lib/cmake/${PROJECT_LIB})
+install(FILES   cmake/${PROJECT_LIB}.cmake DESTINATION lib/cmake/${PROJECT_LIB})
 
-install(
-        FILES "${project_config}" "${version_config}"
-        DESTINATION "${config_install_dir}"
-)
+#install(FILES "${project_config}" "${version_config}"  DESTINATION "${config_install_dir}")
 
-install(FILES cmake/${PROJECT_LIB}.cmake DESTINATION lib/cmake/${PROJECT_LIB})

@@ -8,7 +8,6 @@
 #include <boost/multiprecision/cpp_int.hpp>
 #include <milecsa_light_api.hpp>
 
-#include "milecsa_light_api.hpp"
 #include "crypto.h"
 #include "crypto_types.h"
 #include "json.hpp"
@@ -20,10 +19,10 @@ milecsa::light::result prepare_transaction(const std::string &name,
                                            const std::string &blockId,
                                            const uint64_t  transactionId,
 
-                                           unsigned short assetCode,
-                                           const std::string &amount,
+                                           const milecsa::token  &asset,
+                                           float                 amount,
+                                           float                 fee,
                                            const std::string &description,
-                                           const std::string &fee,
 //
 // Signed json
 //
@@ -83,17 +82,20 @@ milecsa::light::result prepare_transaction(const std::string &name,
     Signature signature;
     Digest    _digest;
 
+    std::string amount_string =  abs(amount) < FLT_EPSILON ? "0" : asset.value_to_string(amount);// milecsa::assets::to_string(amount);
+
     DigestCalculator calculator;
 
     calculator.Initialize();
 
     calculator.Update(trx_id);
     calculator.Update(bid);
-    calculator.Update(assetCode);
+
+    calculator.Update(asset.code);
 
     calculator.Update(source);
     calculator.Update(destination);
-    calculator.Update(amount, amount.size());
+    calculator.Update(amount_string, amount_string.size());
     calculator.Update(description, description.size());
 
     calculator.Finalize(_digest);
@@ -102,6 +104,9 @@ milecsa::light::result prepare_transaction(const std::string &name,
     digest = _digest.ToBase58CheckString();
 
     nlohmann::json parameters;
+
+    std::string fee_string =  abs(fee) <= FLT_EPSILON ?  asset.value_to_string(0):  asset.value_to_string(fee);
+
     parameters = {
             {"transaction-name", name},
             {"block-id",        blockId},
@@ -110,8 +115,8 @@ milecsa::light::result prepare_transaction(const std::string &name,
             {"signature",       signature.ToBase58CheckString()},
             {"from",            keyPair.public_key},
             {"to",              dstWalletPublicKey},
-            {"asset",           {{"amount", amount}, {"code", assetCode}}},
-            {"fee",             fee},
+            {"asset",           {{"amount", amount_string}, {"code", asset.code}}},
+            {"fee",             fee_string},
             {"description",     description}
     };
 

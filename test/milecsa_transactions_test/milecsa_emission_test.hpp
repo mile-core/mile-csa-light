@@ -12,10 +12,11 @@ struct Emission: public MIleTestTransaction {
 
     Emission():MIleTestTransaction("Emission"){}
 
-    bool test() {
+    bool test(const milecsa::token &token) {
+
+        float fee = 0.0f;
 
         std::string transaction;
-        std::string fee;
         std::string digest;
 
         if (milecsa::transaction::prepare_emission(
@@ -23,10 +24,10 @@ struct Emission: public MIleTestTransaction {
                 "2n9z7C3f9SdCrLuCkekxFRgaFq8eoJMizRzbJDpxGoXnYgTaoz",
                 "0",
                 milecsa::transaction::default_transaction_id,
+                token,
                 1,
-                "1000",
-                "memo",
                 fee,
+                "memo",
 
                 transaction,
                 digest,
@@ -37,7 +38,7 @@ struct Emission: public MIleTestTransaction {
         }
 
         BOOST_TEST_MESSAGE("Wallet    trx: " + transaction);
-        BOOST_TEST_MESSAGE("Wallet    fee: " + fee);
+        BOOST_TEST_MESSAGE("Wallet    fee: " + token.value_to_string(fee));
         BOOST_TEST_MESSAGE("Wallet digest: " + digest);
 
         return  true;
