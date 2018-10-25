@@ -8,7 +8,6 @@
 #include <string>
 #include <string.h>
 #include <boost/multiprecision/cpp_int.hpp>
-#include <milecsa_light_api.hpp>
 #include "json.hpp"
 
 extern milecsa::light::result prepare_transaction(const std::string &name, const std::string &privateKey,
@@ -17,10 +16,10 @@ extern milecsa::light::result prepare_transaction(const std::string &name, const
                                                   const std::string &blockId,
                                                   const uint64_t  transactionId,
 
-                                                  unsigned short assetCode,
-                                                  const std::string &amount,
-                                                  const std::string &description,
-                                                  const std::string &fee,
+                                                  const milecsa::token  &asset,
+                                                  float                 amount,
+                                                  float                 fee,
+                                                  const std::string     &description,
 //
 // Signed json
 //
@@ -34,10 +33,10 @@ milecsa::light::result milecsa::transaction::prepare_emission(const std::string 
                                                               const std::string &blockId,
                                                               const uint64_t  transactionId,
 
-                                                              unsigned short assetCode,
-                                                              const std::string &amount,
-                                                              const std::string &description,
-                                                              const std::string &fee,
+                                                              const milecsa::token  &asset,
+                                                              float                 amount,
+                                                              float                 fee,
+                                                              const std::string     &description,
 //
 // Signed json
 //
@@ -52,10 +51,10 @@ milecsa::light::result milecsa::transaction::prepare_emission(const std::string 
                                blockId,
                                transactionId,
 
-                               assetCode,
+                               asset,
                                amount,
-                               description,
                                fee,
+                               description,
                                transaction,
                                digest,
                                errorMessage

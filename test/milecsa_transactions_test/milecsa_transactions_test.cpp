@@ -7,12 +7,14 @@
 
 BOOST_FIXTURE_TEST_CASE( TransferAsset, Wallet )
 {
-    BOOST_CHECK(test());
+    BOOST_CHECK(test(milecsa::assets::XDR));
+    BOOST_CHECK(test(milecsa::assets::MILE));
 }
 
 BOOST_FIXTURE_TEST_CASE( EmissionAsset, Emission )
 {
-    BOOST_CHECK(test());
+    BOOST_CHECK(test(milecsa::assets::XDR));
+    BOOST_CHECK(test(milecsa::assets::MILE));
 }
 
 

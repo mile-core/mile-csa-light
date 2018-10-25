@@ -32,28 +32,13 @@ namespace milecsa {
         } result;
     }
 
-    namespace asset {
-
-        typedef enum: unsigned short {
-            XDR = 0,
-            MILE = 1
-        } code ;
-
-        /**
-       *
-       * Prepare asset amount from asset with user defined precision
-       *
-       * @tparam T
-       * @param amount - amount
-       * @param precision - user defined precision
-       * @return prepared amount fixed point number presented as string
-       */
-        template <typename T>
-        std::string amount_to_string_with_precision(T amount, int precision){
-            std::stringstream stream;
-            stream << std::fixed << std::setprecision(precision) << amount;
-            return stream.str();
-        }
+    /**
+     * Token description
+     */
+    struct token {
+        unsigned short code;
+        unsigned short precision;
+        std::string name;
 
         template <typename T>
         /**
@@ -64,16 +49,40 @@ namespace milecsa {
          * @param assetCode - asset code
          * @return prepared amount fixed point number presented as string
          */
-        std::string amount_to_string(T amount, milecsa::asset::code assetCode){
-            switch (assetCode){
-                case XDR:
-                    return amount_to_string_with_precision(amount, 5);
-                default:
-                    return amount_to_string_with_precision(amount, 2);
-            }
+        std::string value_to_string(T amount) const {
+            std::stringstream stream;
+            stream << std::fixed << std::setprecision(precision) << amount;
+            return stream.str();
         }
 
-    }
+        /**
+         * Build tocken description
+         *
+         * @param code
+         * @param precision
+         * @param name
+         */
+        token(unsigned short code, unsigned short precision, const std::string &name);
+        token(const token &);
+
+    private:
+        token();
+    };
+
+    /**
+     * Available blockchain tokens
+     */
+    struct assets {
+        /**
+         * Stable coin
+         */
+        static token XDR;
+
+        /**
+         * Index coin
+         */
+        static token MILE;
+    };
 
     namespace keys {
 
@@ -168,8 +177,8 @@ namespace milecsa {
          * @param transactionId - user defined id or milecsa::transaction::default_transaction_id
          * @param assetCode - asset code
          * @param amount - transfer amount
+         * @param fee - always 0
          * @param description - transfer description
-         * @param fee - always empty
          * @param transaction - returned SIGNED transaction json body, can send as "params" keyword for json-rpc method "send-transaction"
          * @param digest - uniq transaction digest string
          * @param errorMessage - error message if something wrong happened
@@ -181,10 +190,10 @@ namespace milecsa {
                                        const std::string &blockId,
                                        const uint64_t transactionId,
 
-                                       asset::code assetCode,
-                                       const std::string &amount,
-                                       const std::string &description,
-                                       const std::string &fee,
+                                       const milecsa::token  &asset,
+                                       float                 amount,
+                                       float                 fee,
+                                       const std::string     &description,
 
                 //
                 // Signed json
@@ -215,10 +224,10 @@ namespace milecsa {
                                        const std::string &blockId,
                                        const uint64_t transactionId,
 
-                                       unsigned short asset,
-                                       const std::string &amount,
-                                       const std::string &description,
-                                       const std::string &fee,
+                                       const milecsa::token  &asset,
+                                       float                 amount,
+                                       float                 fee,
+                                       const std::string     &description,
 
                 //
                 // Signed json

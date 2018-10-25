@@ -23,6 +23,26 @@
 1. Centos7 (gcc v4.8.5)
 1. OSX 10.13, XCode10
 
+### Tokens
+
+```cpp
+    #include "milecsa_light_api.hpp"
+    
+    // available tokens: 
+    milecsa::token stable = milecsa::assets::XDR;
+    milecsa::token index  = milecsa::assets::MILE;
+
+    // Properties
+    std::cout << "Name:      " << stable.name;
+    std::cout << "Code:      " << stable.code;
+    std::cout << "Precision: " << stable.precision;
+
+    // Fixed point conversion to string presentation    
+    std::string amount = asset.value_to_string(100.1f);
+    
+
+```
+
 ### Wallet public/private keys Pair structure
 
 ```cpp
