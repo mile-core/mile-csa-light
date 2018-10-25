@@ -39,7 +39,7 @@
 
     // Fixed point conversion to string presentation    
     std::string amount = asset.value_to_string(100.1f);
-    
+     
 
 ```
 
