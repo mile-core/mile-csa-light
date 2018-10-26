@@ -62,12 +62,12 @@ void float2FixedPoint(float n, std::string &output, int afterpoint)
 {
     output.clear();
 
-#if (GCC_VERSION > 70200 || __clang__)
-    char res[(sizeof(n)+afterpoint) * 16];
-#else
+#if __USE_MILECSA_FIXED_POINT_IMP__
     char *res = (char *)malloc((sizeof(n)+afterpoint) * 16);
     if (!res)
         return;
+#else
+    char res[(sizeof(n)+afterpoint) * 16];
 #endif
 
     int ipart = (int)n;
@@ -91,7 +91,7 @@ void float2FixedPoint(float n, std::string &output, int afterpoint)
 
     output += res;
 
-#if (GCC_VERSION > 70200 || __clang__)
+#if __USE_MILECSA_FIXED_POINT_IMP__
     free(res);
 #endif
 }

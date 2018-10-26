@@ -88,7 +88,7 @@ milecsa::light::result milecsa::transaction::prepare_emission(const std::string 
 
     nlohmann::json parameters;
 
-    std::string fee_string =  abs(fee) <= FLT_EPSILON ?  asset.value_to_string(0):  asset.value_to_string(fee);
+    std::string fee_string = asset.value_to_string(fee);
 
     parameters = {
             {"transaction-name", "EmissionTransaction"},
