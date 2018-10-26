@@ -7,6 +7,16 @@
 #include <iomanip>
 #include <sstream>
 
+#define GCC_VERSION (__GNUC__ * 10000 \
+                     + __GNUC_MINOR__ * 100 \
+                     + __GNUC_PATCHLEVEL__)
+
+#if !(GCC_VERSION > 70200 || __clang__)
+#define __USE_MILECSA_FIXED_POINT_IMP__ 1
+#endif
+
+extern void float2FixedPoint(float n, std::string &output, int afterpoint);
+
 namespace milecsa {
 
     namespace light {
@@ -50,9 +60,12 @@ namespace milecsa {
          * @return prepared amount fixed point number presented as string
          */
         std::string value_to_string(T amount) const {
-            std::stringstream stream;
-            stream << std::fixed << std::setprecision(precision) << amount;
-            return stream.str();
+            //
+            // truncate rest of the number
+            //
+            std::string value;
+            float2FixedPoint((float)amount, value, precision);
+            return value;
         }
 
         /**
