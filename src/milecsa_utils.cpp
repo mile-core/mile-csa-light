@@ -62,7 +62,7 @@ void float2FixedPoint(float n, std::string &output, int afterpoint)
 {
     output.clear();
 
-#if !(GCC_VERSION > 70200 || __clang__)
+#if (GCC_VERSION > 70200 || __clang__)
     char res[(sizeof(n)+afterpoint) * 16];
 #else
     char *res = (char *)malloc((sizeof(n)+afterpoint) * 16);
