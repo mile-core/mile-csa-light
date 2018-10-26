@@ -12,29 +12,25 @@
 #include "crypto_types.h"
 #include "json.hpp"
 
-milecsa::light::result prepare_transaction(const std::string &name,
-                                           const std::string &privateKey,
-                                           const std::string &dstWalletPublicKey,
+milecsa::light::result prepare_parameters(
+        const std::string &privateKey,
+        const std::string &dstWalletPublicKey,
 
-                                           const std::string &blockId,
-                                           const uint64_t  transactionId,
+        const std::string &blockId,
+        uint64_t  &transactionId,
 
-                                           const milecsa::token  &asset,
-                                           float                 amount,
-                                           float                 fee,
-                                           const std::string &description,
-//
-// Signed json
-//
-                                           std::string &transaction,
-                                           std::string &digest,
-                                           std::string &errorMessage) {
+        const milecsa::token  &asset,
+
+        milecsa::light::Pair &keyPair,
+        uint256_t &bid,
+        PublicKey &source,
+        PrivateKey &sourcePrivate,
+        PublicKey &destination,
+        std::string &errorMessage){
 
     static  time_t _trx_counter = 0;
 
     milecsa::light::result result;
-
-    milecsa::light::Pair keyPair;
 
     if ( (result = milecsa::keys::generate_from_private_key(keyPair, privateKey, errorMessage)) != milecsa::light::result::OK) {
         return result;
@@ -45,14 +41,12 @@ milecsa::light::result prepare_transaction(const std::string &name,
         return milecsa::light::result::ALREADY_EXIST;
     }
 
-    uint256_t bid;
-
     if (!StringToUInt256(blockId, bid, false)) {
         errorMessage = "block could not be converted to uint256_t";
         return milecsa::light::result::FAIL;
     }
 
-    uint64_t trx_id;
+    uint64_t trx_id = transactionId;
 
     if (transactionId == milecsa::transaction::default_transaction_id) {
         /* initialize random seed: */
@@ -63,64 +57,19 @@ milecsa::light::result prepare_transaction(const std::string &name,
         trx_id = transactionId;
     }
 
-    PublicKey source;
     if(!source.SetBase58CheckString(keyPair.public_key, errorMessage)) {
         return milecsa::light::result::FAIL;
     }
 
-    PrivateKey sourcePrivate;
     if(!sourcePrivate.SetBase58CheckString(keyPair.private_key, errorMessage)) {
         return milecsa::light::result::FAIL;
     }
 
-    PublicKey destination;
     if(!destination.SetBase58CheckString(dstWalletPublicKey, errorMessage)) {
         return milecsa::light::result::FAIL;
     }
 
-    Signer    signer(sourcePrivate, source);
-    Signature signature;
-    Digest    _digest;
-
-    std::string amount_string =  abs(amount) < FLT_EPSILON ? "0" : asset.value_to_string(amount);// milecsa::assets::to_string(amount);
-
-    DigestCalculator calculator;
-
-    calculator.Initialize();
-
-    calculator.Update(trx_id);
-    calculator.Update(bid);
-
-    calculator.Update(asset.code);
-
-    calculator.Update(source);
-    calculator.Update(destination);
-    calculator.Update(amount_string, amount_string.size());
-    calculator.Update(description, description.size());
-
-    calculator.Finalize(_digest);
-
-    signer.SignDigest(_digest, signature);
-    digest = _digest.ToBase58CheckString();
-
-    nlohmann::json parameters;
-
-    std::string fee_string =  abs(fee) <= FLT_EPSILON ?  asset.value_to_string(0):  asset.value_to_string(fee);
-
-    parameters = {
-            {"transaction-name", name},
-            {"block-id",        blockId},
-            {"transaction-id",  trx_id},
-            {"digest",          digest},
-            {"signature",       signature.ToBase58CheckString()},
-            {"from",            keyPair.public_key},
-            {"to",              dstWalletPublicKey},
-            {"asset",           {{"amount", amount_string}, {"code", asset.code}}},
-            {"fee",             fee_string},
-            {"description",     description}
-    };
-
-    transaction = parameters.dump();
+    transactionId = trx_id;
 
     return  milecsa::light::result::OK;
 
