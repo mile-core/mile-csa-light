@@ -22,7 +22,7 @@ using namespace milecsa::transaction;
 using namespace milecsa::keys;
 using namespace std;
 
-string url = "http://lotus000.testnet.mile.global/v1/api";
+string url = "http://167.99.186.253/v1/api";
 
 int send_transaction(const string &body)
 {
