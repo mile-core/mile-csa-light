@@ -22,8 +22,7 @@ using namespace milecsa::transaction;
 using namespace milecsa::keys;
 using namespace std;
 
-//string url = "http://node002.testnet.mile.global/v1/api";
-string url = "http://104.248.7.135/v1/api";
+string url = "http://lotus000.testnet.mile.global/v1/api";
 
 int send_transaction(const string &body)
 {
@@ -145,7 +144,7 @@ int main(int argc, char *argv[]) {
             amount,                    /// amount of transfer
 
             0.0,                       /// fee is always 0
-            "",                        /// description
+            "lotus00 node testing",             /// description
 
             transaction,               /// returned signed transaction as json string
             digest,                    /// uinq transaction digest string

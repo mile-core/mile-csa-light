@@ -13,6 +13,12 @@ include_directories(
 )
 
 find_package (Boost REQUIRED COMPONENTS ${BOOST_COMPONENTS})
+find_package(CURL)
+
+if (${CURL_FOUND})
+    message(STATUS "curl library version: " ${CURL_VERSION_STRING})
+    add_compile_definitions(WITH_CURL)
+endif ()
 
 add_subdirectory(initial)
 add_subdirectory(milecsa_keys_pair_test)

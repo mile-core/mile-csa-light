@@ -203,15 +203,15 @@ namespace milecsa {
                                        std::string &errorMessage);
 
         /**
-         * Prepare signed transaction JSON packet for making emission of XDR to send to the MILE blockchain.
+         * Prepare signed transaction JSON packet for making emission.
+         * If asset == MILE then XDR will be emitted,
+         * in other hand if asset == XDR then MILE reverse emissions will be handled
          *
          * @param privateKey
          * @param dstWalletPublicKey
          * @param blockId
          * @param transactionId
          * @param asset
-         * @param amount
-         * @param description
          * @param fee
          * @param transaction
          * @param digest
@@ -225,10 +225,7 @@ namespace milecsa {
                                        const uint64_t transactionId,
 
                                        const milecsa::token  &asset,
-                                       float                 amount,
                                        float                 fee,
-                                       const std::string     &description,
-
                 //
                 // Signed json
                 //

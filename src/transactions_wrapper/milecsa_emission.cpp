@@ -8,24 +8,25 @@
 #include <string>
 #include <string.h>
 #include <boost/multiprecision/cpp_int.hpp>
+#include "crypto.h"
+#include "crypto_types.h"
 #include "json.hpp"
 
-extern milecsa::light::result prepare_transaction(const std::string &name, const std::string &privateKey,
-                                                  const std::string &dstWalletPublicKey,
+extern milecsa::light::result prepare_parameters(
+        const std::string &privateKey,
+        const std::string &dstWalletPublicKey,
 
-                                                  const std::string &blockId,
-                                                  const uint64_t  transactionId,
+        const std::string &blockId,
+        uint64_t  &transactionId,
 
-                                                  const milecsa::token  &asset,
-                                                  float                 amount,
-                                                  float                 fee,
-                                                  const std::string     &description,
-//
-// Signed json
-//
-                                                  std::string &transaction,
-                                                  std::string &digest,
-                                                  std::string &errorMessage);
+        const milecsa::token  &asset,
+
+        milecsa::light::Pair &keyPair,
+        uint256_t &bid,
+        PublicKey &source,
+        PrivateKey &sourcePrivate,
+        PublicKey &destination,
+        std::string &errorMessage);
 
 milecsa::light::result milecsa::transaction::prepare_emission(const std::string &privateKey,
                                                               const std::string &dstWalletPublicKey,
@@ -34,29 +35,74 @@ milecsa::light::result milecsa::transaction::prepare_emission(const std::string 
                                                               const uint64_t  transactionId,
 
                                                               const milecsa::token  &asset,
-                                                              float                 amount,
                                                               float                 fee,
-                                                              const std::string     &description,
 //
 // Signed json
 //
                                                               std::string &transaction,
                                                               std::string &digest,
                                                               std::string &errorMessage){
+    milecsa::light::result result;
+    milecsa::light::Pair keyPair;
 
-    return prepare_transaction("EmissionTransaction",
-                               privateKey,
-                               dstWalletPublicKey,
+    uint256_t bid;
+    uint64_t trx_id = transactionId;
+    PublicKey source;
+    PrivateKey sourcePrivate;
+    PublicKey destination;
 
-                               blockId,
-                               transactionId,
+    result = prepare_parameters(
+            privateKey,
+            dstWalletPublicKey,
+            blockId,
+            trx_id,
+            asset,
+            keyPair,
+            bid,
+            source,
+            sourcePrivate,
+            destination,
+            errorMessage);
 
-                               asset,
-                               amount,
-                               fee,
-                               description,
-                               transaction,
-                               digest,
-                               errorMessage
-    );
+    if (result != milecsa::light::result::OK){
+        return result;
+    }
+
+    Signer    signer(sourcePrivate, source);
+    Signature signature;
+    Digest    _digest;
+
+    DigestCalculator calculator;
+
+    calculator.Initialize();
+
+    calculator.Update(trx_id);
+    calculator.Update(bid);
+    calculator.Update(asset.code);
+    calculator.Update(source);
+
+    calculator.Finalize(_digest);
+
+    signer.SignDigest(_digest, signature);
+    digest = _digest.ToBase58CheckString();
+
+    nlohmann::json parameters;
+
+    std::string fee_string =  abs(fee) <= FLT_EPSILON ?  asset.value_to_string(0):  asset.value_to_string(fee);
+
+    parameters = {
+            {"transaction-name", "EmissionTransaction"},
+            {"block-id",        blockId},
+            {"transaction-id",  trx_id},
+            {"digest",          digest},
+            {"signature",       signature.ToBase58CheckString()},
+            {"from",            keyPair.public_key},
+            {"to",              dstWalletPublicKey},
+            {"asset",           {{"code", asset.code}}},
+            {"fee",             fee_string}
+    };
+
+    transaction = parameters.dump();
+
+    return  milecsa::light::result::OK;
 }

@@ -3,14 +3,22 @@
 #include "milecsa_light_api.hpp"
 #include <boost/test/included/unit_test.hpp>
 
+#ifdef WITH_CURL
+#include <curl/curl.h>
+#else
+#warning "curl library has not been configured"
+#endif
+
+using namespace std;
+
 struct MileTest {
 
-    MileTest(const std::string &name): name(name) {
+    MileTest(const string &name): name(name) {
         BOOST_TEST_MESSAGE("Setup "+name);
     }
 
     void print_key_pair(milecsa::light::Pair *keyPair) {
-        std::string mess = "Public key: ";
+        string mess = "Public key: ";
         mess += keyPair->public_key;
         BOOST_TEST_MESSAGE(mess);
         mess = "Private key: ";

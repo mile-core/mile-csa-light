@@ -21,17 +21,13 @@ struct Emission: public MIleTestTransaction {
 
         if (milecsa::transaction::prepare_emission(
                 keyPair.private_key,
-                "2n9z7C3f9SdCrLuCkekxFRgaFq8eoJMizRzbJDpxGoXnYgTaoz",
-                "0",
+                destinationPair.public_key,
+                get_block_id(),
                 milecsa::transaction::default_transaction_id,
                 token,
-                1,
                 fee,
-                "memo",
-
                 transaction,
                 digest,
-
                 errorDescription)){
             BOOST_TEST_MESSAGE("Error happened in Pair");
             return false;
@@ -41,7 +37,7 @@ struct Emission: public MIleTestTransaction {
         BOOST_TEST_MESSAGE("Wallet    fee: " + token.value_to_string(fee));
         BOOST_TEST_MESSAGE("Wallet digest: " + digest);
 
-        return  true;
+        return  send(transaction) == 0;
 
     }
 };
