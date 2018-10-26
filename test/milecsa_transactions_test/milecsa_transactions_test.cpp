@@ -5,15 +5,24 @@
 #include "milecsa_transfer_test.hpp"
 #include "../MileTest.h"
 
-BOOST_FIXTURE_TEST_CASE( TransferAsset, Wallet )
+BOOST_FIXTURE_TEST_CASE( TransferXDR, Wallet )
 {
     BOOST_CHECK(test(milecsa::assets::XDR));
+}
+
+BOOST_FIXTURE_TEST_CASE( TransferMILE, Wallet )
+{
     BOOST_CHECK(test(milecsa::assets::MILE));
 }
 
-BOOST_FIXTURE_TEST_CASE( EmissionAsset, Emission )
+
+BOOST_FIXTURE_TEST_CASE( EmissionDirect, Emission )
 {
     BOOST_CHECK(test(milecsa::assets::MILE)); // direct
+}
+
+BOOST_FIXTURE_TEST_CASE( EmissionReverce, Emission )
+{
     BOOST_CHECK(test(milecsa::assets::XDR));  // reverse
 }
 
