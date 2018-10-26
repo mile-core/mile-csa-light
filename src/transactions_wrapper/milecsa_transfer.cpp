@@ -73,7 +73,7 @@ milecsa::light::result milecsa::transaction::prepare_transfer(const std::string 
     Signature signature;
     Digest    _digest;
 
-    std::string amount_string =  abs(amount) < FLT_EPSILON ? asset.value_to_string(0.0f) : asset.value_to_string(amount);// milecsa::assets::to_string(amount);
+    std::string amount_string = asset.value_to_string(amount);
 
     DigestCalculator calculator;
 
@@ -96,7 +96,7 @@ milecsa::light::result milecsa::transaction::prepare_transfer(const std::string 
 
     nlohmann::json parameters;
 
-    std::string fee_string =  abs(fee) <= FLT_EPSILON ?  asset.value_to_string(0.0f):  asset.value_to_string(fee);
+    std::string fee_string = asset.value_to_string(fee);
 
     parameters = {
             {"transaction-name", "TransferAssetsTransaction"},
