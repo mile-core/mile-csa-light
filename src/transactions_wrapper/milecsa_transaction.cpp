@@ -64,9 +64,10 @@ milecsa::light::result prepare_parameters(
         return milecsa::light::result::FAIL;
     }
 
-    if(!destination.SetBase58CheckString(dstWalletPublicKey, errorMessage)) {
-        return milecsa::light::result::FAIL;
-    }
+    if (!dstWalletPublicKey.empty())
+        if(!destination.SetBase58CheckString(dstWalletPublicKey, errorMessage)) {
+            return milecsa::light::result::FAIL;
+        }
 
     transactionId = trx_id;
 

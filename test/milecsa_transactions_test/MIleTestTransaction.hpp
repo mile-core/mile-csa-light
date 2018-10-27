@@ -32,6 +32,7 @@ struct MIleTestTransaction: public MileTest  {
     std::string get_block_id(){
 
         string block_id = "-1";
+#ifdef WITH_CURL
 
         string request = "{\"id\":0,\"jsonrpc\":\"2.0\",\"method\":\"get-current-block-id\",\"params\":null,\"version\":0.0}";
 
@@ -95,9 +96,10 @@ struct MIleTestTransaction: public MileTest  {
             ///
             curl_easy_cleanup(curl);
         }
-
+#else
+#warning "curl library has not been configured"
+#endif
         return block_id;
-
     }
 
     int send(const string &body)

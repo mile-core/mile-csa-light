@@ -14,7 +14,6 @@ file (GLOB TESTS_SOURCES ${TESTS_SOURCES}
 set (TEST transactions_test_${PROJECT_LIB})
 find_package(CURL)
 
-
 add_executable(${TEST} ${TESTS_SOURCES})
 
 set(EXT_LIBS ${TEST} ${PROJECT_LIB} ${PROJECT_LIB} ${Boost_LIBRARIES})

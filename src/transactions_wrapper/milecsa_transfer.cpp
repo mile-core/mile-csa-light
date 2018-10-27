@@ -41,6 +41,7 @@ milecsa::light::result milecsa::transaction::prepare_transfer(const std::string 
                                                               std::string &transaction,
                                                               std::string &digest,
                                                               std::string &errorMessage) {
+
     milecsa::light::result result;
     milecsa::light::Pair keyPair;
 

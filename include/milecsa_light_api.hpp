@@ -224,7 +224,6 @@ namespace milecsa {
          * in other hand if asset == XDR then MILE reverse emissions will be handled
          *
          * @param privateKey
-         * @param dstWalletPublicKey
          * @param blockId
          * @param transactionId
          * @param asset
@@ -235,8 +234,6 @@ namespace milecsa {
          * @return
          */
         light::result prepare_emission(const std::string &privateKey,
-                                       const std::string &dstWalletPublicKey,
-
                                        const std::string &blockId,
                                        const uint64_t transactionId,
 
