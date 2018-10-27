@@ -53,13 +53,6 @@ else ()
     message(STATUS "'mile-crypto' library found")
 endif()
 
-#add_subdirectory(vendor/mile-crypto ${CMAKE_BINARY_DIR}/mile-crypto-build)
-#set(MILE_CRYPTO_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor/mile-crypto-api/include
-#        CACHE PATH "mile crypto include directory")
-#set(MILE_CRYPTO_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor/mile-crypto-api/include
-#        CACHE PATH "mile crypto include directory")
-#set(MILE_CRYPTO_LIB mile_crypto)
-
 add_subdirectory(lib)
 add_subdirectory(test)
 enable_testing ()

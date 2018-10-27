@@ -7,8 +7,6 @@
 BOOST_AUTO_TEST_CASE( FixedPoint )
 {
 
-    //std::cerr << " cgg: " << GCC_VERSION  << std::endl;
-
     std::cerr << "" << milecsa::assets::XDR.value_to_string(0.1f) << std::endl;
     std::cerr << "" << milecsa::assets::XDR.value_to_string(1.1f) << std::endl;
     std::cerr << "" << milecsa::assets::XDR.value_to_string(1.01f) << std::endl;
