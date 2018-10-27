@@ -9,9 +9,8 @@
 #include <string>
 #include <string.h>
 
-#include "crypto_types.h"
-#include "crypto.h"
-#include "milecsa_utils.hpp"
+#include "mile_crypto.h"
+//#include "milecsa_utils.hpp"
 
 milecsa::light::result milecsa::keys::generate(
         milecsa::light::Pair &pair,

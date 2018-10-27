@@ -21,7 +21,7 @@ BOOST_FIXTURE_TEST_CASE( EmissionDirect, Emission )
     BOOST_CHECK(test(milecsa::assets::MILE)); // direct
 }
 
-BOOST_FIXTURE_TEST_CASE( EmissionReverce, Emission )
+BOOST_FIXTURE_TEST_CASE( EmissionReverse, Emission )
 {
     BOOST_CHECK(test(milecsa::assets::XDR));  // reverse
 }

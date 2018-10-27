@@ -11,7 +11,7 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, std::string* data) {
 
 struct MIleTestTransaction: public MileTest  {
 
-    std::string url =  "http://167.99.186.253/v1/api";
+    std::string url =  "http://167.99.186.253:8080/v1/api";
 
     MIleTestTransaction(const std::string &name) : MileTest(name) {
         if (milecsa::keys::generate_with_secret(keyPair, "secret-phrase", errorDescription)) {
@@ -79,6 +79,8 @@ struct MIleTestTransaction: public MileTest  {
 
             }
             else {
+                cerr << " : " << response_string << endl;
+
                 nlohmann::json json = nlohmann::json::parse(response_string);
 
                 nlohmann::json result = json.at("result");
