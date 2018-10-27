@@ -7,15 +7,18 @@
 #include <iomanip>
 #include <sstream>
 
-#define GCC_VERSION (__GNUC__ * 10000 \
-                     + __GNUC_MINOR__ * 100 \
-                     + __GNUC_PATCHLEVEL__)
 
-#if !(GCC_VERSION > 70200 || __clang__)
-#define __USE_MILECSA_FIXED_POINT_IMP__ 1
-#endif
-
-extern void float2FixedPoint(float n, std::string &output, int afterpoint);
+/**
+ * Convert float to fixed point. It needs to calculate right signed digest of message contains number values.
+ *
+ * @param value
+ * @param precision
+ * @param output
+ *
+ * note: exported from mile-crypto
+ *
+ */
+extern void float2FixedPoint(float value, int precision, std::string &output);
 
 namespace milecsa {
 
@@ -64,7 +67,7 @@ namespace milecsa {
             // truncate rest of the number
             //
             std::string value;
-            float2FixedPoint((float)amount, value, precision);
+            float2FixedPoint((float)amount, precision, value);
             return value;
         }
 
@@ -221,7 +224,6 @@ namespace milecsa {
          * in other hand if asset == XDR then MILE reverse emissions will be handled
          *
          * @param privateKey
-         * @param dstWalletPublicKey
          * @param blockId
          * @param transactionId
          * @param asset
@@ -232,8 +234,6 @@ namespace milecsa {
          * @return
          */
         light::result prepare_emission(const std::string &privateKey,
-                                       const std::string &dstWalletPublicKey,
-
                                        const std::string &blockId,
                                        const uint64_t transactionId,
 

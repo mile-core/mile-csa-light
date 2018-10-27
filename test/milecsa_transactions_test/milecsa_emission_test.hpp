@@ -21,7 +21,6 @@ struct Emission: public MIleTestTransaction {
 
         if (milecsa::transaction::prepare_emission(
                 keyPair.private_key,
-                destinationPair.public_key,
                 get_block_id(),
                 milecsa::transaction::default_transaction_id,
                 token,

@@ -28,7 +28,6 @@ extern milecsa::light::result prepare_parameters(
         std::string &errorMessage);
 
 milecsa::light::result milecsa::transaction::prepare_emission(const std::string &privateKey,
-                                                              const std::string &dstWalletPublicKey,
 
                                                               const std::string &blockId,
                                                               const uint64_t  transactionId,
@@ -49,6 +48,7 @@ milecsa::light::result milecsa::transaction::prepare_emission(const std::string 
     PublicKey source;
     PrivateKey sourcePrivate;
     PublicKey destination;
+    std::string dstWalletPublicKey;
 
     result = prepare_parameters(
             privateKey,
@@ -96,7 +96,6 @@ milecsa::light::result milecsa::transaction::prepare_emission(const std::string 
             {"digest",          digest},
             {"signature",       signature.ToBase58CheckString()},
             {"from",            keyPair.public_key},
-            {"to",              dstWalletPublicKey},
             {"asset",           {{"code", asset.code}}},
             {"fee",             fee_string}
     };
