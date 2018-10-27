@@ -43,6 +43,22 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 
 endif()
 
+file(GLOB LIBRARY_FILE_LIST ${CMAKE_SOURCE_DIR}/vendor/mile-crypto/*.*)
+list(LENGTH LIBRARY_FILE_LIST NUMBER_OF_FILES)
+if (NUMBER_OF_FILES EQUAL 0)
+    message(STATUS "'mile-crypto' library not found")
+    execute_process(COMMAND git submodule update --init --recursive vendor/mile-crypto
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+else ()
+    message(STATUS "'mile-crypto' library found")
+endif()
+
+#add_subdirectory(vendor/mile-crypto ${CMAKE_BINARY_DIR}/mile-crypto-build)
+#set(MILE_CRYPTO_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor/mile-crypto-api/include
+#        CACHE PATH "mile crypto include directory")
+#set(MILE_CRYPTO_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor/mile-crypto-api/include
+#        CACHE PATH "mile crypto include directory")
+#set(MILE_CRYPTO_LIB mile_crypto)
 
 add_subdirectory(lib)
 add_subdirectory(test)
