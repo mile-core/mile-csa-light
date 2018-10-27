@@ -8,8 +8,7 @@
 #include <string>
 #include <string.h>
 #include <boost/multiprecision/cpp_int.hpp>
-#include "crypto.h"
-#include "crypto_types.h"
+#include "mile_crypto.h"
 #include "json.hpp"
 
 extern milecsa::light::result prepare_parameters(

@@ -6,30 +6,29 @@ include_directories (
         ../include
         ../src
         ../src/transactions_wrapper
-        ../vendor/crypto
-        ../vendor/ed25519/src
         ../vendor/nlohmann/
+        ../vendor/mile-crypto/include
+        ../vendor/mile-crypto/src/ed25519/include
 )
 
 FILE(GLOB PUBLIC_INCLUDE_FILES
         ../include/*.hpp
         )
 
-
 FILE(GLOB INCLUDE_FILES
         ../vendor/nlohmann/*.hpp
-        ../vendor/crypto/*.h
-        ../vendor/crypto/*.hpp
-        ../vendor/ed25519/src/*.h
+        ../vendor/mile-crypto/src/ed25519/include/*.c
+        ../vendor/mile-crypto/src/private_include/*.h
+        ../vendor/mile-crypto/include/*.h
         ${PUBLIC_INCLUDE_FILES}
         )
 
 FILE(GLOB SOURCES
-        ../vendor/crypto/*.cpp
-        ../vendor/crypto/*.c
-        ../vendor/ed25519/src/*.c
         ../src/*.cpp
         ../src/transactions_wrapper/*.cpp
+        ../vendor/mile-crypto/src/ed25519/src/*.c
+        ../vendor/mile-crypto/src/*.c
+        ../vendor/mile-crypto/src/*.cpp
         )
 
 set (BOOST_COMPONENTS system)
@@ -45,7 +44,9 @@ else ()
     message ("Unknown compiler")
 endif ()
 
-add_library(${PROJECT_LIB}  ${SOURCES})
+add_library(
+        ${PROJECT_LIB}
+        ${SOURCES})
 
 target_link_libraries (
         ${PROJECT_LIB}  PUBLIC
