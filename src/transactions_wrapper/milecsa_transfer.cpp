@@ -99,7 +99,7 @@ milecsa::light::result milecsa::transaction::prepare_transfer(const std::string 
     std::string fee_string = asset.value_to_string(fee);
 
     parameters = {
-            {"transaction-name", "TransferAssetsTransaction"},
+            {"transaction-type", "TransferAssetsTransaction"},
             {"block-id",        blockId},
             {"transaction-id",  trx_id},
             {"digest",          digest},
