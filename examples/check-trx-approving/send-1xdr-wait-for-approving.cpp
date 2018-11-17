@@ -31,13 +31,19 @@ using namespace milecsa::keys;
 using namespace std;
 using namespace nlohmann;
 
+///
+/// MILE Testnet node with opened JSON-RPC API
+///
 string url = "https://lotus000.testnet.mile.global/v1/api";
 
+/// Get current block id
 uint64_t       get_block_id();
-nlohmann::json get_block(uint64_t block_id);
-int            send_transaction(const string &body);
 
-nlohmann::json request(string method, const json &params);
+/// Get block data serialized to json by block id
+nlohmann::json get_block(uint64_t block_id);
+
+/// Send prepared signed transaction
+int            send_transaction(const string &body);
 
 int main(int argc, char *argv[]) {
 
@@ -105,7 +111,7 @@ int main(int argc, char *argv[]) {
     milecsa::token token = milecsa::assets::XDR;
 
     ///
-    /// Prepare fixed point presentation asset amount
+    /// Prepare asset amount
     ///
     float amount = 0.01f;
 
@@ -192,10 +198,14 @@ int main(int argc, char *argv[]) {
     exit(EXIT_SUCCESS);
 }
 
-size_t writeFunction(void *ptr, size_t size, size_t nmemb, std::string* data) {
-    data->append((char*) ptr, size * nmemb);
-    return size * nmemb;
-}
+///
+/// Common JSON-RPC request
+///
+/// \param method - json-rpc method
+/// \param params - method params
+/// \return json srialzed object
+///
+json request(string method, const json &params);
 
 json get_block(uint64_t block_id){
 
@@ -236,6 +246,16 @@ int send_transaction(const string &body)
     }
 
     return ret;
+}
+
+
+///
+/// libCurl utilites
+///
+
+size_t writeFunction(void *ptr, size_t size, size_t nmemb, std::string* data) {
+    data->append((char*) ptr, size * nmemb);
+    return size * nmemb;
 }
 
 json request(string method, const json &params) {
