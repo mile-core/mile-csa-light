@@ -1,7 +1,7 @@
 //
 // Created by lotus mile on 20/10/2018.
 //
-// Example shows how to prepare MILE transaction adn then send to node use MILE JSON-RPC API
+// Example shows how to prepare MILE transaction and then send to node use MILE JSON-RPC API
 // Alternate C++ wrappper for json-rpc API: https://github.com/mile-core/mile-csa-jsonrpc-client
 //
 //

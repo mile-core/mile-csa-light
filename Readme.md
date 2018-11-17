@@ -174,3 +174,11 @@
      ...  
    
 ```
+
+###  Common recommendations how to check transactions is approved by blockchain or not:
+    
+    . Send transaction 
+    . Getting next 4 blocks including current block (till block contains this transaction)
+    . Check transaction in section "transactions" in block 
+    . If transactions is found with the same digest or public-key and transaction-id that have ben sent - blockchain is approved the operation
+    . If within next 4 blocks (including current) the sent transaction did not appear in the blockchain, then we can assume that the transaction was not accepted and should be resend with new block-id and new transaction-id untill this one will be apporved 
