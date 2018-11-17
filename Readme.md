@@ -182,3 +182,5 @@
     . Check transaction in section "transactions" in block 
     . If transactions is found with the same digest or public-key and transaction-id that have ben sent - blockchain is approved the operation
     . If within next 4 blocks (including current) the sent transaction did not appear in the blockchain, then we can assume that the transaction was not accepted and should be resend with new block-id and new transaction-id untill this one will be apporved 
+
+#### [Check transaction approving Example](https://github.com/mile-core/mile-csa-light/blob/master/examples/check-trx-approving/send-1xdr-wait-for-approving.cpp)
